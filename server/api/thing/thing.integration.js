@@ -5,7 +5,7 @@ var request = require('supertest');
 
 var newThing;
 
-describe('Thing API:', function() {
+/*describe('Thing API:', function() {
 
   describe('GET /api/things', function() {
     var things;
@@ -145,3 +145,4 @@ describe('Thing API:', function() {
   });
 
 });
+*/

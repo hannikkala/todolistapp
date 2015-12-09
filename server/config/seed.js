@@ -6,8 +6,9 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
+import Todo from '../api/todo/todo.model';
 
-Thing.find({}).removeAsync()
+/*Thing.find({}).removeAsync()
   .then(function() {
     Thing.create({
       name: 'Development Tools',
@@ -37,11 +38,11 @@ Thing.find({}).removeAsync()
       info: 'Easily deploy your app to Heroku or Openshift with the heroku ' +
              'and openshift subgenerators'
     });
-  });
+  });*/
 
 User.find({}).removeAsync()
   .then(function() {
-    User.createAsync({
+    User.create({
       provider: 'local',
       name: 'Test User',
       email: 'test@example.com',
@@ -53,7 +54,16 @@ User.find({}).removeAsync()
       email: 'admin@example.com',
       password: 'admin'
     })
-    .then(function() {
+    .then(function(testUser, adminUser) {
       console.log('finished populating users');
+      Todo.find({}).removeAsync().then(function() {
+        Todo.create({
+          title: "Test todo",
+          done: false,
+          user: adminUser
+        }).then(function() {
+          console.log('finished populating todos');
+        });
+      });
     });
   });
