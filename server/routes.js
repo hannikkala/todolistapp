@@ -12,7 +12,7 @@ module.exports = function(app) {
   // Insert routes below
   app.use('/api/users', require('./api/user'));
   app.use('/api/todolists', require('./api/todolist'));
-  app.use('/api/:todoListId/todos', require('./api/todo'));
+  app.use('/api/todolists', require('./api/todo'));
 
   app.use('/auth', require('./auth'));
 

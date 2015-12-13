@@ -48,17 +48,17 @@ describe('Todo API Router:', function() {
 
     it('should route to todo.controller.index', function() {
       routerStub.get
-        .withArgs('/', 'authService.isAuthenticated', 'todoCtrl.index')
+        .withArgs('/:todolistId/todos/', 'authService.isAuthenticated', 'todoCtrl.index')
         .should.have.been.calledOnce;
     });
 
   });
 
-  describe('GET /api/todos/:id', function() {
+  describe('GET /api/:todolistId/todos/:id', function() {
 
     it('should route to todo.controller.show', function() {
       routerStub.get
-        .withArgs('/:id', 'authService.isAuthenticated', 'todoCtrl.show')
+        .withArgs('/:todolistId/todos/:id', 'authService.isAuthenticated', 'todoCtrl.show')
         .should.have.been.calledOnce;
     });
 
@@ -68,7 +68,7 @@ describe('Todo API Router:', function() {
 
     it('should route to todo.controller.create', function() {
       routerStub.post
-        .withArgs('/', 'authService.isAuthenticated', 'todoCtrl.create')
+        .withArgs('/:todolistId/todos/', 'authService.isAuthenticated', 'todoCtrl.create')
         .should.have.been.calledOnce;
     });
 
@@ -78,7 +78,7 @@ describe('Todo API Router:', function() {
 
     it('should route to todo.controller.update', function() {
       routerStub.put
-        .withArgs('/:id', 'authService.isAuthenticated', 'todoCtrl.update')
+        .withArgs('/:todolistId/todos/:id', 'authService.isAuthenticated', 'todoCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -88,7 +88,7 @@ describe('Todo API Router:', function() {
 
     it('should route to todo.controller.update', function() {
       routerStub.patch
-        .withArgs('/:id', 'authService.isAuthenticated', 'todoCtrl.update')
+        .withArgs('/:todolistId/todos/:id', 'authService.isAuthenticated', 'todoCtrl.update')
         .should.have.been.calledOnce;
     });
 
@@ -98,7 +98,7 @@ describe('Todo API Router:', function() {
 
     it('should route to todo.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id', 'authService.isAuthenticated', 'todoCtrl.destroy')
+        .withArgs('/:todolistId/todos/:id', 'authService.isAuthenticated', 'todoCtrl.destroy')
         .should.have.been.calledOnce;
     });
 

@@ -10,6 +10,7 @@
 'use strict';
 
 var _ = require('lodash');
+var Promise = require('bluebird');
 var Todo = require('./todo.model.js');
 var Todolist = require('../todolist/todolist.model');
 
@@ -83,10 +84,26 @@ exports.create = function(req, res) {
     res.status(400).end();
     return;
   }
-  req.body.user = req.user;
+
   Todo.createAsync(req.body)
     .then(responseWithResult(res, 201))
+    .then(function(todo) {
+        Todolist.findById(req.params.todolistId)
+          .populate('todos')
+          .execAsync()
+          .then(function(todolist) {
+            var todos = todolist.todos || [];
+            todos.push(todo);
+            todolist.todos = todos;
+            todolist.saveAsync();
+          });
+        return function(todo) {
+          return todo;
+        };
+      })
     .catch(handleError(res));
+
+
 };
 
 // Updates an existing Thing in the DB
