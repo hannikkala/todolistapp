@@ -1,24 +1,41 @@
 'use strict';
 (function() {
 
-function MainController($scope, $http) {
+function MainController($scope, todolistService, _) {
   var self = this;
-  this.awesomeThings = [];
+  this.todolists = [];
 
-  $http.get('/api/things').then(function(response) {
-    self.awesomeThings = response.data;
+  todolistService.findAll().then(function(todos) {
+    self.todolists = todos;
   });
 
-  this.addThing = function() {
-    if (self.newThing === '') {
+  $scope.saveTodolist = function() {
+    if (!$scope.newTodolist || $scope.newTodolist.title === '') {
       return;
     }
-    $http.post('/api/things', { name: self.newThing });
-    self.newThing = '';
+    if(!$scope.newTodolist._id) {
+      todolistService.create($scope.newTodolist).then(function(data) {
+        self.todolists.push(data);
+      });
+    } else {
+      todolistService.update($scope.newTodolist).then(function(data) {
+        var found = _.find(self.todolists, {_id: data._id});
+        if(found) {
+          found.title = data.title;
+        }
+      });
+    }
+    $scope.newTodolist = null;
   };
 
-  this.deleteThing = function(thing) {
-    $http.delete('/api/things/' + thing._id);
+  $scope.deleteTodolist = function(todolist) {
+    todolistService.remove(todolist._id).then(function() {
+      _.remove(self.todolists, {_id: todolist._id});
+    });
+  };
+
+  $scope.selectTodolist = function(todolist) {
+    $scope.newTodolist = angular.copy(todolist);
   };
 }
 

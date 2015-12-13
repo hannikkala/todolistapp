@@ -9,23 +9,27 @@ describe('Controller: MainController', function() {
   var scope;
   var MainController;
   var state;
-  var $httpBackend;
+  var mockTodolistService;
+  var createController;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function(_$httpBackend_, $controller, $rootScope, $state) {
-    $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/things')
-      .respond(['HTML5 Boilerplate', 'AngularJS', 'Karma', 'Express']);
-
+  beforeEach(inject(function(todolistService, $controller, $rootScope, $state) {
+    mockTodolistService = todolistService;
     scope = $rootScope.$new();
     state = $state;
-    MainController = $controller('MainController', {
-      $scope: scope
-    });
+    createController = function() {
+      return $controller('MainController', {
+        $scope: scope,
+        todoService: mockTodolistService,
+        _: window._
+      });
+    };
+    MainController = createController();
   }));
 
-  it('should attach a list of things to the controller', function() {
-    $httpBackend.flush();
-    expect(MainController.awesomeThings.length).toBe(4);
+  it('should attach a list of todolists to the controller', function() {
+    spyOn(mockTodolistService, 'findAll').and.callThrough();
+    createController();
+    expect(mockTodolistService.findAll).toHaveBeenCalled();
   });
 });

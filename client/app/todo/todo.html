@@ -1,0 +1,49 @@
+<navbar></navbar>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Todo service</h1>
+  </div>
+</header>
+
+<br/>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <form novalidate>
+        <input type="hidden" data-ng-model="todoCtrl.newTodo.done" value="false">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">What needs to be done:</span>
+          <input type="text" class="form-control" placeholder="Write title for todo"
+                 aria-describedby="basic-addon1" data-ng-model="todoCtrl.newTodo.title" required/>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-4">
+      <button type="button" class="btn btn-default" ng-click="todoCtrl.saveTodo();">Save todo</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Todos:</h2>
+    </div>
+  </div>
+  <div class="row" ng-repeat="todo in todoCtrl.todos">
+    <div class="col-lg-1">
+      <input type="checkbox" data-ng-model="todo.done" ng-click="todoCtrl.selectTodo(todo); saveTodo();" />
+    </div>
+    <div class="col-lg-10">
+      <span ng-show="!todo.done">{{todo.title}}</span>
+      <del ng-show="todo.done">{{todo.title}}</del>
+    </div>
+    <div class="col-lg-1">
+      <button type="button" ng-click="todoCtrl.deleteTodo(todo);">Remove</button>
+    </div>
+  </div>
+</div>
+
+<footer></footer>

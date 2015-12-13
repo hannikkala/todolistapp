@@ -55,4 +55,8 @@ angular.module('unitytodoApp', [
         });
       }
     });
+  })
+
+  .factory('_', function($window) {
+      return $window._;
   });

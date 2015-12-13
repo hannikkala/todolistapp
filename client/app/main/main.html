@@ -2,19 +2,44 @@
 
 <header class="hero-unit" id="banner">
   <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+    <h1>Todo service</h1>
   </div>
 </header>
+
+<br/>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      <form novalidate>
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">Todo list title:</span>
+          <input type="text" class="form-control" placeholder="Write title for todolist"
+                 aria-describedby="basic-addon1" data-ng-model="newTodolist.title" required/>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-4">
+      <button type="button" class="btn btn-default" ng-click="saveTodolist()">Save todo list</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
   <div class="row">
     <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in main.awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}</a></li>
-      </ul>
+      <h2>Todolists:</h2>
+    </div>
+  </div>
+  <div class="row" ng-repeat="todolist in main.todolists">
+    <div class="col-lg-1">
+      <button type="button" ng-click="selectTodolist(todolist);">Edit</button>
+    </div>
+    <div class="col-lg-10">
+      <a href="/todolists/{{todolist._id}}">{{todolist.title}}</a>
+    </div>
+    <div class="col-lg-1">
+      <button type="button" ng-click="deleteTodolist(todolist);">Remove</button>
     </div>
   </div>
 </div>
