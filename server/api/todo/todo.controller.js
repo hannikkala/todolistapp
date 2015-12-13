@@ -63,9 +63,13 @@ function removeEntity(res) {
 
 // Gets a list of Things
 exports.index = function(req, res) {
-  Todolist.find({_id: req.params.todoListId, user: req.user._id})
+  Todolist.findOne({_id: req.params.todolistId, user: req.user._id})
     .populate('todos')
     .execAsync()
+    .then(function(todolist) {
+        console.log(todolist);
+        return todolist.todos;
+    })
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
@@ -85,25 +89,18 @@ exports.create = function(req, res) {
     return;
   }
 
-  Todo.createAsync(req.body)
-    .then(responseWithResult(res, 201))
-    .then(function(todo) {
-        Todolist.findById(req.params.todolistId)
-          .populate('todos')
-          .execAsync()
-          .then(function(todolist) {
-            var todos = todolist.todos || [];
-            todos.push(todo);
-            todolist.todos = todos;
-            todolist.saveAsync();
+  Todolist.findById(req.params.todolistId)
+      .populate('todos')
+      .execAsync()
+      .then(function(todolist) {
+        Todo.createAsync(req.body).then(function(todo) {
+          todolist.todos.push(todo);
+          return todolist.saveAsync().then(function() {
+            return todo;
           });
-        return function(todo) {
-          return todo;
-        };
-      })
-    .catch(handleError(res));
-
-
+        }).then(responseWithResult(res, 201))
+            .catch(handleError(res));
+      });
 };
 
 // Updates an existing Thing in the DB
