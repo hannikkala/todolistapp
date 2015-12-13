@@ -6,9 +6,13 @@
 'use strict';
 
 var MainPage = function() {
-  this.heroEl = element(by.css('.hero-unit'));
-  this.h1El = this.heroEl.element(by.css('h1'));
-  this.imgEl = this.heroEl.element(by.css('img'));
+  this.form = element(by.id('todolistForm'));
+  this.formTitle = this.form.element(by.model('main.newTodolist.title'));
+  this.formSubmitBtn = this.form.element(by.css('button'));
+  this.todolistEl = element(by.id('todolistContainer'));
+  this.getLastTodolist = function() {
+    return element(by.id('todolistContainer')).all(by.css('a')).last();
+  }
 };
 
 module.exports = new MainPage();

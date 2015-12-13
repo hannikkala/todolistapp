@@ -38,7 +38,7 @@ describe('Logout View', function() {
 
       navbar = require('../../components/navbar/navbar.po');
 
-      expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/');
+      expect(browser.getCurrentUrl()).toBe(config.baseUrl + '/login');
       expect(navbar.navbarAccountGreeting.isDisplayed()).toBe(false);
     });
 
