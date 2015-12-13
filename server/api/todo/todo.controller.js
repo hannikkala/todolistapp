@@ -67,7 +67,6 @@ exports.index = function(req, res) {
     .populate('todos')
     .execAsync()
     .then(function(todolist) {
-        console.log(todolist);
         return todolist.todos;
     })
     .then(responseWithResult(res))
