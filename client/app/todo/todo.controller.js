@@ -14,24 +14,21 @@ angular.module('unitytodoApp')
         if (!self.newTodo || self.newTodo.title === '') {
           return;
         }
-        if(!self.newTodo._id) {
-          todoService.create(self.todolistId, self.newTodo).then(function(data) {
-            self.todos.push(data);
-          });
-        } else {
-          todoService.update(self.todolistId, self.newTodo).then(function(data) {
-            var found = _.find(self.todos, {_id: data._id});
-            if(found) {
-              found.title = data.title;
-            }
-          });
-        }
+
+        todoService.create(self.todolistId, self.newTodo).then(function(data) {
+          self.todos.push(data);
+        });
+
         this.newTodo = null;
       };
 
       this.deleteTodo = function(todo) {
-        todolistService.remove(todo._id).then(function() {
-          _.remove(self.todolists, {_id: todo._id});
+        todoService.remove(self.todolistId, todo._id).then(function() {
+          _.remove(self.todos, {_id: todo._id});
         });
+      };
+
+      this.selectTodo = function(todo) {
+        self.newTodo = angular.copy(todo);
       };
   });

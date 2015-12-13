@@ -50,4 +50,5 @@ describe('Controller: TodoCtrl', function () {
     TodoCtrl.saveTodo();
     expect(mockTodoService.create).toHaveBeenCalled();
   });
+
 });
