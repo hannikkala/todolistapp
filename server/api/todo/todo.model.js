@@ -4,9 +4,11 @@ var mongoose = require('bluebird').promisifyAll(require('mongoose'));
 var Schema = mongoose.Schema;
 
 var TodoSchema = new Schema({
-  title: String,
-  done: Boolean,
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  title: {
+    type: String,
+    required: true
+  },
+  done: Boolean
 });
 
 module.exports = mongoose.model('Todo', TodoSchema);

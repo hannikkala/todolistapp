@@ -3,12 +3,11 @@
 var app = require('../..');
 var request = require('supertest');
 var User = require('../user/user.model');
-var Todolist = require('../todolist/todolist.model');
 
-var newTodo;
+var newTodolist;
 
-describe('Todo API:', function() {
-  var user, token, todolist;
+describe('Todolist API:', function() {
+  var user, token;
 
   // Clear users before testing
   before(function() {
@@ -23,15 +22,9 @@ describe('Todo API:', function() {
     });
   });
 
-  before(function() {
-    return Todolist.removeAsync().then(function() {
-      todolist = new Todolist({
-        title: 'Test todolist',
-        user: user
-      });
-
-      return todolist.saveAsync();
-    });
+  // Clear users after testing
+  after(function() {
+    return User.removeAsync();
   });
 
   beforeEach(function(done) {
@@ -49,17 +42,12 @@ describe('Todo API:', function() {
         });
   });
 
-  // Clear users after testing
-  after(function() {
-    return User.removeAsync();
-  });
-
-  describe('GET /api/:todolistId/todos', function() {
-    var todos;
+  describe('GET /api/todolists', function() {
+    var todolists;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/' + todolist._id + '/todos')
+        .get('/api/todolists')
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -67,25 +55,24 @@ describe('Todo API:', function() {
           if (err) {
             return done(err);
           }
-          todos = res.body;
+          todolists = res.body;
           done();
         });
     });
 
     it('should respond with JSON array', function() {
-      todos.should.be.instanceOf(Array);
+      todolists.should.be.instanceOf(Array);
     });
 
   });
 
-  describe('POST /api/:todolistId/todos', function() {
+  describe('POST /api/todolists', function() {
     beforeEach(function(done) {
       request(app)
-        .post('/api/' + todolist._id + '/todos')
+        .post('/api/todolists')
         .set('authorization', 'Bearer ' + token)
         .send({
-          title: 'New Todo',
-          done: false
+          title: 'New Todolist'
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -93,24 +80,23 @@ describe('Todo API:', function() {
           if (err) {
             return done(err);
           }
-          newTodo = res.body;
+          newTodolist = res.body;
           done();
         });
     });
 
-    it('should respond with the newly created thing', function() {
-      newTodo.title.should.equal('New Todo');
-      newTodo.done.should.equal(false);
+    it('should respond with the newly created todolist', function() {
+      newTodolist.title.should.equal('New Todolist');
     });
 
   });
 
-  describe('GET /api/:todolistId/todos/:id', function() {
-    var todo;
+  describe('GET /api/todolists/:id', function() {
+    var todolist;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/' + todolist._id + '/todos/' + newTodo._id)
+        .get('/api/todolists/' + newTodolist._id)
         .set('authorization', 'Bearer ' + token)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -118,32 +104,30 @@ describe('Todo API:', function() {
           if (err) {
             return done(err);
           }
-          todo = res.body;
+          todolist = res.body;
           done();
         });
     });
 
     afterEach(function() {
-      todo = {};
+      todolist = {};
     });
 
-    it('should respond with the requested todo', function() {
-      todo.title.should.equal('New Todo');
-      todo.done.should.equal(false);
+    it('should respond with the requested todolist', function() {
+      todolist.title.should.equal('New Todolist');
     });
 
   });
 
-  describe('PUT /api/:todolistId/todos/:id', function() {
-    var updatedTodo;
+  describe('PUT /api/todolists/:id', function() {
+    var updatedTodolist;
 
     beforeEach(function(done) {
       request(app)
-        .put('/api/' + todolist._id + '/todos/' + newTodo._id)
+        .put('/api/todolists/' + newTodolist._id)
         .set('authorization', 'Bearer ' + token)
         .send({
-          title: 'Updated Todo',
-          done: true
+          title: 'Updated Todolist'
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -151,27 +135,26 @@ describe('Todo API:', function() {
           if (err) {
             return done(err);
           }
-          updatedTodo = res.body;
+          updatedTodolist = res.body;
           done();
         });
     });
 
     afterEach(function() {
-      updatedTodo = {};
+      updatedTodolist = {};
     });
 
-    it('should respond with the updated todo', function() {
-      updatedTodo.title.should.equal('Updated Todo');
-      updatedTodo.done.should.equal(true);
+    it('should respond with the updated todolist', function() {
+      updatedTodolist.title.should.equal('Updated Todolist');
     });
 
   });
 
-  describe('DELETE /api/:todolistId/todos/:id', function() {
+  describe('DELETE /api/todolists/:id', function() {
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete('/api/' + todolist._id + '/todos/' + newTodo._id)
+        .delete('/api/todolists/' + newTodolist._id)
         .set('authorization', 'Bearer ' + token)
         .expect(204)
         .end(function(err, res) {
@@ -182,9 +165,9 @@ describe('Todo API:', function() {
         });
     });
 
-    it('should respond with 404 when thing does not exist', function(done) {
+    it('should respond with 404 when todolist does not exist', function(done) {
       request(app)
-        .delete('/api/' + todolist._id + '/todos/' + newTodo._id)
+        .delete('/api/todolists/' + newTodolist._id)
         .set('authorization', 'Bearer ' + token)
         .expect(404)
         .end(function(err, res) {

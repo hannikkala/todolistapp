@@ -7,6 +7,7 @@
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
 import Todo from '../api/todo/todo.model';
+import Todolist from '../api/todolist/todolist.model';
 
 /*Thing.find({}).removeAsync()
   .then(function() {
@@ -58,11 +59,22 @@ User.find({}).removeAsync()
       console.log('finished populating users');
       Todo.find({}).removeAsync().then(function() {
         Todo.create({
-          title: "Test todo",
-          done: false,
-          user: adminUser
-        }).then(function() {
+          title: 'Test todo',
+          done: false
+        }, {
+          title: 'Demo todo 2',
+          done: false
+        }).then(function(todo1, todo2) {
           console.log('finished populating todos');
+          Todolist.find({}).removeAsync().then(function() {
+            Todolist.create({
+              title: 'Demo list',
+              user: adminUser,
+              todos: [todo1, todo2]
+            }).then(function() {
+              console.log('finished populating todolist');
+            })
+          });
         });
       });
     });

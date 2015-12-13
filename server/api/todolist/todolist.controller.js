@@ -1,17 +1,16 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /api/todos              ->  index
- * POST    /api/todos              ->  create
- * GET     /api/todos/:id          ->  show
- * PUT     /api/todos/:id          ->  update
- * DELETE  /api/todos/:id          ->  destroy
+ * GET     /api/todolists              ->  index
+ * POST    /api/todolists              ->  create
+ * GET     /api/todolists/:id          ->  show
+ * PUT     /api/todolists/:id          ->  update
+ * DELETE  /api/todolists/:id          ->  destroy
  */
 
 'use strict';
 
 var _ = require('lodash');
-var Todo = require('./todo.model.js');
-var Todolist = require('../todolist/todolist.model');
+var Todolist = require('./todolist.model');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -60,50 +59,44 @@ function removeEntity(res) {
   };
 }
 
-// Gets a list of Things
+// Gets a list of Todolists
 exports.index = function(req, res) {
-  Todolist.find({_id: req.params.todoListId, user: req.user._id})
-    .populate('todos')
-    .execAsync()
+  Todolist.findAsync({user: req.user})
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
-// Gets a single Todo from the DB
+// Gets a single Todolist from the DB
 exports.show = function(req, res) {
-  Todo.findByIdAsync(req.params.id)
+  Todolist.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
-// Creates a new Thing in the DB
+// Creates a new Todolist in the DB
 exports.create = function(req, res) {
-  if(!req.body || req.body.title === '') {
-    res.status(400).end();
-    return;
-  }
   req.body.user = req.user;
-  Todo.createAsync(req.body)
+  Todolist.createAsync(req.body)
     .then(responseWithResult(res, 201))
     .catch(handleError(res));
 };
 
-// Updates an existing Thing in the DB
+// Updates an existing Todolist in the DB
 exports.update = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Todo.findByIdAsync(req.params.id)
+  Todolist.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(responseWithResult(res))
     .catch(handleError(res));
 };
 
-// Deletes a Thing from the DB
+// Deletes a Todolist from the DB
 exports.destroy = function(req, res) {
-  Todo.findByIdAsync(req.params.id)
+  Todolist.findByIdAsync(req.params.id)
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
