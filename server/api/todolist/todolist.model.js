@@ -19,4 +19,11 @@ var TodolistSchema = new Schema({
   }
 });
 
+TodolistSchema.pre('remove', function(next) {
+  this.model('Todo').remove(
+      {_id: {$in: this.todos}}
+  ).exec();
+  next();
+});
+
 module.exports = mongoose.model('Todolist', TodolistSchema);

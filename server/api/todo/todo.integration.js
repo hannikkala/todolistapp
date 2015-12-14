@@ -2,8 +2,11 @@
 
 var app = require('../..');
 var request = require('supertest');
+var requestPromised = require('supertest-as-promised');
 var User = require('../user/user.model');
 var Todolist = require('../todolist/todolist.model');
+var Todo = require('../todo/todo.model');
+var Promise = require('bluebird');
 
 var newTodo;
 
@@ -201,6 +204,45 @@ describe('Todo API:', function() {
         });
     });
 
+    it('should remove reference from todolist when todo is removed', function(done) {
+      var todolist, todo1;
+
+      Todo.find({}).removeAsync().then(function() {
+        return Todo.create({
+          title: 'Test todo',
+          done: false
+        }, {
+          title: 'Demo todo 2',
+          done: false
+        }).then(function(t1, todo2) {
+          todo1 = t1;
+          return Todolist.find({}).removeAsync().then(function() {
+            return Todolist.create({
+              title: 'Demo list',
+              user: user,
+              todos: [t1, todo2]
+            }).then(function(tl) {
+              todolist = tl;
+            });
+          });
+        });
+      }).then(function() {
+        requestPromised(app)
+            .delete('/api/todolists/' + todolist._id + '/todos/' + todo1._id)
+            .set('authorization', 'Bearer ' + token)
+            .expect(204)
+            .then(function() {
+              Todolist.findOne({_id: todolist._id})
+                .populate('todos')
+                .execAsync()
+                .then(function(todolist) {
+                  todolist.todos.length.should.equal(1);
+                  done();
+              });
+            });
+      });
+
+    });
   });
 
 });

@@ -87,7 +87,8 @@ exports.update = function(req, res) {
   if (req.body._id) {
     delete req.body._id;
   }
-  Todolist.findByIdAsync(req.params.id)
+  Todolist.findOne({_id: req.params.id, user: req.user})
+    .execAsync()
     .then(handleEntityNotFound(res))
     .then(saveUpdates(req.body))
     .then(responseWithResult(res))
@@ -96,7 +97,8 @@ exports.update = function(req, res) {
 
 // Deletes a Todolist from the DB
 exports.destroy = function(req, res) {
-  Todolist.findByIdAsync(req.params.id)
+  Todolist.findOne({_id: req.params.id, user: req.user})
+    .execAsync()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
