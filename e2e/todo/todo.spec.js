@@ -28,8 +28,7 @@ describe('Main View', function() {
             mainPage = require('../main/main.po');
         }).then(function() {
             mainPage.formTitle.sendKeys('New Todo');
-            return mainPage.formSubmitBtn.click();
-        }).then(function() {
+            mainPage.formSubmitBtn.click();
             return mainPage.getLastTodolist().click();
         }).then(done);
     });
@@ -48,8 +47,7 @@ describe('Main View', function() {
             todoPage.countRows().then(function(rows) {
                 rowCount = rows;
                 todoPage.formTitle.sendKeys('New Todo');
-                return todoPage.formSubmitBtn.click();
-            }).then(function() {
+                todoPage.formSubmitBtn.click();
                 return todoPage.countRows();
             }).then(function(rows) {
                 expect(rows).toEqual(rowCount + 1);
@@ -60,13 +58,11 @@ describe('Main View', function() {
             var rowCount = 0;
             todoPage.countRows().then(function(rows) {
                 todoPage.formTitle.sendKeys('New Todo');
-                return todoPage.formSubmitBtn.click();
-            }).then(function() {
+                todoPage.formSubmitBtn.click();
                 return todoPage.countRows();
             }).then(function(rows) {
                 rowCount = rows;
-                return todoPage.todoEl.all(by.xpath("//button[contains(text(),'Remove')]")).last().click();
-            }).then(function() {
+                todoPage.todoEl.all(by.xpath("//button[contains(text(),'Remove')]")).last().click();
                 return todoPage.countRows();
             }).then(function(rows) {
                 expect(rows).toEqual(rowCount - 1);

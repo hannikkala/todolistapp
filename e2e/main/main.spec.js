@@ -36,8 +36,7 @@ describe('Main View', function() {
         page.todolistEl.all(by.css('.row')).count().then(function(rows) {
           rowCount = rows;
           page.formTitle.sendKeys('New Todo');
-          return page.formSubmitBtn.click();
-        }).then(function() {
+          page.formSubmitBtn.click();
           return page.todolistEl.all(by.css('.row')).count();
         }).then(function(rows) {
           expect(rows).toEqual(rowCount + 1);
@@ -47,14 +46,12 @@ describe('Main View', function() {
       it('should be able to edit todolist', function() {
           page.formTitle.sendKeys('New Todo');
           page.formSubmitBtn.click().then(function() {
-            return page.todolistEl.all(by.xpath("//button[contains(text(),'Edit')]")).last().click();
-          }).then(function() {
-              expect(page.formTitle.getAttribute('value')).toEqual('New Todo');
-              page.formTitle.clear();
-              page.formTitle.sendKeys('Updated Todo');
-              return page.formSubmitBtn.click();
-          }).then(function() {
-              expect(page.todolistEl.all(by.css('.row')).last().element(by.css('.col-lg-10')).getText()).toEqual('Updated Todo');
+            page.todolistEl.all(by.xpath("//button[contains(text(),'Edit')]")).last().click();
+            expect(page.formTitle.getAttribute('value')).toEqual('New Todo');
+            page.formTitle.clear();
+            page.formTitle.sendKeys('Updated Todo');
+            page.formSubmitBtn.click();
+            expect(page.todolistEl.all(by.css('.row')).last().element(by.css('.col-lg-10')).getText()).toEqual('Updated Todo');
           });
       });
 
@@ -66,8 +63,7 @@ describe('Main View', function() {
           })
           .then(function (rows) {
               rowCount = rows;
-              return page.todolistEl.all(by.xpath("//button[contains(text(),'Remove')]")).last().click();
-          }).then(function() {
+              page.todolistEl.all(by.xpath("//button[contains(text(),'Remove')]")).last().click();
               return page.todolistEl.all(by.css('.row')).count();
           }).then(function(rows) {
               expect(rows).toEqual(rowCount - 1);
