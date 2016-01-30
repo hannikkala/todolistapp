@@ -130,7 +130,10 @@ module.exports = function (grunt) {
       },
       all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
       test: {
-        src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js']
+        src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
+        options: {
+          jshintrc: '<%= yeoman.server %>/.jshintrc-spec'
+        }
       }
     },
 
@@ -217,7 +220,7 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app and karma.conf.js
     wiredep: {
       options: {
-        exclude: [ 
+        exclude: [
           /bootstrap.js/,
           '/json3/',
           '/es5-shim/',
@@ -635,7 +638,7 @@ module.exports = function (grunt) {
       'postcss',
       'express:dev',
       'wait',
-      'open',
+      //'open',
       'watch'
     ]);
   });

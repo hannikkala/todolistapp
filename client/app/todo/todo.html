@@ -36,11 +36,12 @@
     <div class="col-lg-1">
       <input type="checkbox" data-ng-model="todo.done" ng-click="todoCtrl.selectTodo(todo); todoCtrl.saveTodo();" />
     </div>
-    <div class="col-lg-10">
+    <div class="col-lg-9">
       <span ng-show="!todo.done">{{todo.title}}</span>
       <del ng-show="todo.done">{{todo.title}}</del>
     </div>
-    <div class="col-lg-1">
+    <div class="col-lg-2">
+      <button type="button">Edit</button>
       <button type="button" ng-click="todoCtrl.deleteTodo(todo);">Remove</button>
     </div>
   </div>

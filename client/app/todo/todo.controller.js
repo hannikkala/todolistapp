@@ -15,9 +15,19 @@ angular.module('unitytodoApp')
           return;
         }
 
-        todoService.create(self.todolistId, self.newTodo).then(function(data) {
-          self.todos.push(data);
-        });
+        if(self.newTodo._id) {
+            todoService.update(self.todolistId, self.newTodo).then(function(data) {
+                var found = _.find(self.todolists, {_id: data._id});
+                if(found) {
+                    found.title = data.title;
+                    found.done = data.done;
+                }
+            });
+        } else {
+            todoService.create(self.todolistId, self.newTodo).then(function(data) {
+                self.todos.push(data);
+            });
+        }
 
         this.newTodo = null;
       };

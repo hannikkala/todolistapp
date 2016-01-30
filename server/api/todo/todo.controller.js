@@ -10,7 +10,6 @@
 'use strict';
 
 var _ = require('lodash');
-var Promise = require('bluebird');
 var Todo = require('./todo.model.js');
 var Todolist = require('../todolist/todolist.model');
 

@@ -43,8 +43,8 @@ describe('Controller: MainController', function() {
       };
     });
     MainController.newTodolist = {
-      title: "New Todolist"
-      ,done: false
+      title: 'New Todolist',
+      done: false
     };
     MainController.saveTodolist();
     expect(mockTodolistService.create).toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe('Controller: MainController', function() {
         then: function(cb) {
           cb(todolist);
         }
-      }
+      };
     });
     MainController.newTodolist = {
       _id: '123',
@@ -73,7 +73,7 @@ describe('Controller: MainController', function() {
         then: function(cb) {
           cb();
         }
-      }
+      };
     });
     MainController.todolists = [
       {

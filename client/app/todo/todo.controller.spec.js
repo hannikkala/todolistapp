@@ -44,8 +44,8 @@ describe('Controller: TodoCtrl', function () {
       };
     });
     TodoCtrl.newTodo = {
-      title: "New Todo"
-      ,done: false
+      title: 'New Todo',
+      done: false
     };
     TodoCtrl.saveTodo();
     expect(mockTodoService.create).toHaveBeenCalled();

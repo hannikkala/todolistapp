@@ -6,7 +6,6 @@ var requestPromised = require('supertest-as-promised');
 var User = require('../user/user.model');
 var Todolist = require('../todolist/todolist.model');
 var Todo = require('../todo/todo.model');
-var Promise = require('bluebird');
 
 var newTodo;
 
